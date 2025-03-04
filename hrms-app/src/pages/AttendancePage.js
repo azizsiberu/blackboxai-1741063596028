@@ -101,7 +101,6 @@ const AttendancePage = () => {
               backgroundColor: 'rgba(255, 255, 255, 0.8)',
               backdropFilter: 'blur(10px)',
               border: '1px solid rgba(0, 0, 0, 0.1)',
-              borderRadius: theme.shape.borderRadius * 2,
             }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -128,7 +127,6 @@ const AttendancePage = () => {
               backgroundColor: 'rgba(255, 255, 255, 0.8)',
               backdropFilter: 'blur(10px)',
               border: '1px solid rgba(0, 0, 0, 0.1)',
-              borderRadius: theme.shape.borderRadius * 2,
               height: '100%',
               display: 'flex',
               flexDirection: 'column',
@@ -176,7 +174,6 @@ const AttendancePage = () => {
             sx={{
               backgroundColor: 'rgba(255, 255, 255, 0.8)',
               backdropFilter: 'blur(10px)',
-              borderRadius: theme.shape.borderRadius * 2,
               border: '1px solid rgba(0, 0, 0, 0.1)',
             }}
           >
