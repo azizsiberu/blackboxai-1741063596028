@@ -1,82 +1,51 @@
-import { format, parseISO } from 'date-fns';
-
 // Date formatting
 export const formatDate = (date) => {
   if (!date) return '';
-  const parsedDate = typeof date === 'string' ? parseISO(date) : date;
-  return format(parsedDate, 'MMM dd, yyyy');
+  const d = new Date(date);
+  return d.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 };
 
 export const formatDateTime = (date) => {
   if (!date) return '';
-  const parsedDate = typeof date === 'string' ? parseISO(date) : date;
-  return format(parsedDate, 'MMM dd, yyyy HH:mm');
+  const d = new Date(date);
+  return d.toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 };
 
-// Input validation
-export const validateEmail = (email) => {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
+// Time formatting
+export const formatTime = (date) => {
+  if (!date) return '';
+  const d = new Date(date);
+  return d.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 };
 
-export const validatePassword = (password) => {
-  return password.length >= 6;
+// Calculate duration between two dates in days
+export const calculateDuration = (startDate, endDate) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const diffTime = Math.abs(end - start);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays + 1; // Include both start and end dates
 };
 
-// Leave types and their colors
-export const LEAVE_TYPES = {
-  VACATION: 'vacation',
-  SICK: 'sick',
-  PERSONAL: 'personal',
-  OTHER: 'other'
+// Generate unique ID
+export const generateId = () => {
+  return Math.random().toString(36).substr(2, 9);
 };
 
-export const LEAVE_STATUS = {
-  PENDING: 'pending',
-  APPROVED: 'approved',
-  REJECTED: 'rejected'
-};
-
-export const STATUS_COLORS = {
-  [LEAVE_STATUS.PENDING]: '#ffa726',
-  [LEAVE_STATUS.APPROVED]: '#66bb6a',
-  [LEAVE_STATUS.REJECTED]: '#ef5350'
-};
-
-// Employee roles
-export const ROLES = {
-  ADMIN: 'admin',
-  HR: 'hr',
-  EMPLOYEE: 'employee'
-};
-
-// Error messages
-export const ERROR_MESSAGES = {
-  INVALID_EMAIL: 'Please enter a valid email address',
-  INVALID_PASSWORD: 'Password must be at least 6 characters long',
-  REQUIRED_FIELD: 'This field is required',
-  INVALID_DATE: 'Please enter a valid date',
-  SERVER_ERROR: 'Something went wrong. Please try again later',
-  UNAUTHORIZED: 'You are not authorized to perform this action',
-  SESSION_EXPIRED: 'Your session has expired. Please login again'
-};
-
-// Local storage keys
-export const STORAGE_KEYS = {
-  USER: 'user',
-  AUTH_TOKEN: 'auth_token',
-  THEME: 'theme_preference'
-};
-
-// API response handler
-export const handleApiResponse = (response) => {
-  if (response.success) {
-    return response.data;
-  }
-  throw new Error(response.message || ERROR_MESSAGES.SERVER_ERROR);
-};
-
-// File size formatter
+// Format file size
 export const formatFileSize = (bytes) => {
   if (bytes === 0) return '0 Bytes';
   const k = 1024;
@@ -85,51 +54,123 @@ export const formatFileSize = (bytes) => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
 
-// Generate random ID
-export const generateId = () => {
-  return Math.random().toString(36).substr(2, 9);
+// Validate email format
+export const isValidEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
 };
 
-// Check if user has required role
-export const hasRole = (userRole, requiredRole) => {
-  if (userRole === ROLES.ADMIN) return true;
-  if (userRole === ROLES.HR && requiredRole !== ROLES.ADMIN) return true;
-  return userRole === requiredRole;
+// Format phone number
+export const formatPhoneNumber = (phoneNumber) => {
+  const cleaned = ('' + phoneNumber).replace(/\D/g, '');
+  const match = cleaned.match(/^(\d{1})(\d{3})(\d{3})(\d{4})$/);
+  if (match) {
+    return '+' + match[1] + ' (' + match[2] + ') ' + match[3] + '-' + match[4];
+  }
+  return phoneNumber;
+};
+
+// Calculate attendance status
+export const getAttendanceStatus = (checkIn, checkOut) => {
+  if (!checkIn && !checkOut) return 'Absent';
+  if (checkIn && !checkOut) return 'Present';
+  return 'Complete';
+};
+
+// Calculate leave balance
+export const calculateLeaveBalance = (totalLeaves, usedLeaves) => {
+  return Math.max(0, totalLeaves - usedLeaves);
 };
 
 // Format currency
-export const formatCurrency = (amount) => {
+export const formatCurrency = (amount, currency = 'USD') => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD'
+    currency: currency
   }).format(amount);
 };
 
-// Calculate leave duration (excluding weekends)
-export const calculateLeaveDuration = (startDate, endDate) => {
-  let count = 0;
-  const start = new Date(startDate);
-  const end = new Date(endDate);
+// Get initials from name
+export const getInitials = (name) => {
+  if (!name) return '';
+  return name
+    .split(' ')
+    .map(word => word[0])
+    .join('')
+    .toUpperCase();
+};
+
+// Get random color for avatar
+export const getRandomColor = () => {
+  const colors = [
+    '#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e',
+    '#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2c3e50',
+    '#f1c40f', '#e67e22', '#e74c3c', '#95a5a6', '#f39c12',
+    '#d35400', '#c0392b', '#bdc3c7', '#7f8c8d'
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
+
+// Format file name
+export const formatFileName = (fileName, maxLength = 20) => {
+  if (fileName.length <= maxLength) return fileName;
+  const extension = fileName.split('.').pop();
+  const name = fileName.substring(0, fileName.lastIndexOf('.'));
+  return `${name.substring(0, maxLength - extension.length - 3)}...${extension}`;
+};
+
+// Calculate age from date of birth
+export const calculateAge = (dob) => {
+  const birthDate = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
   
-  while (start <= end) {
-    const dayOfWeek = start.getDay();
-    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-      count++;
-    }
-    start.setDate(start.getDate() + 1);
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
   }
   
-  return count;
+  return age;
 };
 
-// Check if date is weekend
-export const isWeekend = (date) => {
-  const day = new Date(date).getDay();
-  return day === 0 || day === 6;
+// Format address
+export const formatAddress = (address) => {
+  const parts = [];
+  if (address.street) parts.push(address.street);
+  if (address.city) parts.push(address.city);
+  if (address.state) parts.push(address.state);
+  if (address.zipCode) parts.push(address.zipCode);
+  if (address.country) parts.push(address.country);
+  
+  return parts.join(', ');
 };
 
-// Format time (24h to 12h)
-export const formatTime = (time) => {
-  if (!time) return '';
-  return format(parseISO(`2000-01-01T${time}`), 'hh:mm a');
+// Calculate experience in years and months
+export const calculateExperience = (joinDate) => {
+  const join = new Date(joinDate);
+  const today = new Date();
+  
+  let years = today.getFullYear() - join.getFullYear();
+  let months = today.getMonth() - join.getMonth();
+  
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+  
+  return {
+    years,
+    months
+  };
+};
+
+// Format experience
+export const formatExperience = (experience) => {
+  const { years, months } = experience;
+  const yearText = years === 1 ? 'year' : 'years';
+  const monthText = months === 1 ? 'month' : 'months';
+  
+  if (years === 0) return `${months} ${monthText}`;
+  if (months === 0) return `${years} ${yearText}`;
+  return `${years} ${yearText}, ${months} ${monthText}`;
 };
