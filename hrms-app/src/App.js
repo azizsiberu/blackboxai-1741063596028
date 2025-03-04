@@ -4,6 +4,11 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import MainLayout from './components/layout/MainLayout';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
+import EmployeesPage from './pages/EmployeesPage';
+import AttendancePage from './pages/AttendancePage';
+import LeaveRequestsPage from './pages/LeaveRequestsPage';
+import AnnouncementsPage from './pages/AnnouncementsPage';
+import CompanyProfilePage from './pages/CompanyProfilePage';
 
 // Create theme with iOS-inspired Material Design
 const theme = createTheme({
@@ -167,7 +172,46 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            {/* Add more routes here */}
+            <Route
+              path="/employees"
+              element={
+                <ProtectedRoute>
+                  <EmployeesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/attendance"
+              element={
+                <ProtectedRoute>
+                  <AttendancePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/leave-requests"
+              element={
+                <ProtectedRoute>
+                  <LeaveRequestsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/announcements"
+              element={
+                <ProtectedRoute>
+                  <AnnouncementsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/company-profile"
+              element={
+                <ProtectedRoute>
+                  <CompanyProfilePage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/" element={<Navigate to="/dashboard" />} />
           </Routes>
         </Router>
