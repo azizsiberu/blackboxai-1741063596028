@@ -106,7 +106,6 @@ const EmployeesPage = () => {
         sx={{
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
           backdropFilter: 'blur(10px)',
-          borderRadius: theme.shape.borderRadius * 2,
           border: '1px solid rgba(0, 0, 0, 0.1)',
         }}
       >
